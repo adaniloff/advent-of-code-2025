@@ -1,11 +1,15 @@
-# Advent of Code 2026
+# Advent of Code 2025
 
-*Based on Kevin Dunglas repository ~~~*
+A simple repository to keep track of my progress (see https://adventofcode.com).
+
+*Based on Kevin Dunglas "Symfony Docker" repository: https://github.com/dunglas/symfony-docker*
 
 **How to use:**
-- see the *Getting Started* section below to build and start the docker container
-- then execute the command with a day to run by doing `docker compose exec php bin/console aoc:runner <day>`
-- *optional* run the tests by doing `docker compose exec -e APP_ENV=test php bin/phpunit`
+- see the "*Getting Started*" section below to build and start the docker container
+- then execute the command with a day to run by running  
+    `docker compose exec php bin/console aoc:runner <day>`
+- *(optional)* run the tests with  
+    `docker compose exec -e APP_ENV=test php bin/phpunit`
 
 ----
 
