@@ -5,24 +5,34 @@ namespace App\Tests\Runner;
 use App\Runner\DayRunner;
 use App\Runner\Execution;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * @coversDefaultClass \App\Runner\DayRunner
  */
-final class DayRunnerTest extends TestCase
+final class DayRunnerTest extends KernelTestCase
 {
+    private DayRunner $dayRunner;
+
+    protected function setUp(): void
+    {
+        $this->dayRunner = self::getContainer()->get(DayRunner::class);
+    }
+
     public function testExecutionWithInvalidDayFailure(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid day: "0"');
-        new DayRunner()->exec(0);
+        $this->dayRunner->exec(0);
     }
 
     public function testExecutionWithDayNotSupportedYetFailure(): void
     {
         // Arrange
-        $mock = $this->getMockBuilder(DayRunner::class)->onlyMethods(['isValid'])->getMock();
+        $mock = $this->getMockBuilder(DayRunner::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['isValid'])
+            ->getMock();
         $mock->expects($this->any())
             ->method('isValid')
             ->willReturn(true);
@@ -37,13 +47,13 @@ final class DayRunnerTest extends TestCase
 
     public function testExecutionWithSupportedDay(): void
     {
-        $this->assertInstanceOf(Execution::class, new DayRunner()->exec(1));
+        $this->assertInstanceOf(Execution::class, $this->dayRunner->exec(1));
     }
 
     #[DataProvider('days')]
     public function testValidity(mixed $day, bool $expected): void
     {
-        $this->assertEquals($expected, new DayRunner()->isValid(day: $day));
+        $this->assertEquals($expected, $this->dayRunner->isValid(day: $day));
     }
 
     public static function days(): array
